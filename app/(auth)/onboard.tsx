@@ -4,10 +4,13 @@ import { router } from "expo-router";
 import { useRef, useState } from "react";
 import { onboarding } from "@/constants";
 import Swiper from "react-native-swiper";
+import CustomButton from "@/components/CustomButton";
 
 const Onboard = () => {
 	const swiperRef = useRef<Swiper>(null);
-	const [index, setActiveIndex] = useState(0);
+	const [activeIndex, setActiveIndex] = useState(0);
+	const isLastSlide = activeIndex === onboarding.length - 1;
+
 	return (
 		<SafeAreaView className="flex h-full items-center justify-between bg-white">
 			<TouchableOpacity
@@ -31,7 +34,7 @@ const Onboard = () => {
 					<View className="flex items-center justify-center p-5" key={item.id}>
 						<Image
 							source={item.image}
-							className="w-ful h-[300px]"
+							className="w-full h-[300px]"
 							resizeMode="contain"
 						/>
 						<View className="flex flex-row items-center justify-center w-full mt-10">
@@ -45,6 +48,15 @@ const Onboard = () => {
 					</View>
 				))}
 			</Swiper>
+			<CustomButton
+				title={isLastSlide ? "Get started" : "Next"}
+				className="w-11/12 mt-10"
+				onPress={() =>
+					isLastSlide
+						? router.replace("/(auth)/sign-up")
+						: swiperRef.current?.scrollBy(1)
+				}
+			/>
 		</SafeAreaView>
 	);
 };
